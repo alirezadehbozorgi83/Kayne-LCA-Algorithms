@@ -1,0 +1,94 @@
+Prefix(ex: http://example.com/)
+Prefix(owl: http://www.w3.org/2002/07/owl#)
+Prefix(rdf: http://www.w3.org/1999/02/22-rdf-syntax-ns#)
+Prefix(rdfs: http://www.w3.org/2000/01/rdf-schema#)
+
+# Define entities
+Class(ex:Entity)
+
+# Define objects
+Class(ex:Object)
+
+# Define properties
+Class(ex:Property)
+
+# Define relations
+Class(ex:Relation)
+
+# Define correspondences
+Class(ex:Correspondence)
+
+# Define linear correspondences
+Class(ex:LinearCorrespondence)
+SubClassOf(ex:Correspondence)
+
+# Define subject and object properties
+ObjectProperty(ex:subjectOf)
+Domain(ex:Entity)
+Range(ex:Relation)
+
+# ObjectProperty(ex:objectOf)
+Domain(ex:Object)
+Range(ex:Relation)
+
+# Define property and relation properties
+ObjectProperty(ex:hasProperty)
+Domain(ex:Relation)
+Range(ex:Property)
+
+# ObjectProperty(ex:hasCorrespondence)
+Domain(ex:Relation)
+Range(ex:Correspondence)
+
+# Define correspondence mapping properties
+DatatypeProperty(ex:mapsTo)
+Domain(ex:Correspondence)
+Range(xsd:float)
+
+# Define example entities
+Individual(ex:john)
+Type(ex:john ex:Entity)
+
+# Individual(ex:mary)
+Type(ex:mary ex:Entity)
+
+# Individual(ex:book)
+Type(ex:book ex:Object)
+
+# Define properties
+Individual(ex:color)
+Type(ex:color ex:Property)
+
+# Individual(ex:size)
+Type(ex:size ex:Property)
+
+# Define relations
+Individual(ex:on1)
+Type(ex:on1 ex:Relation)
+ObjectPropertyAssertion(ex:subjectOf ex:john ex:on1)
+ObjectPropertyAssertion(ex:objectOf ex:book ex:on1)
+ObjectPropertyAssertion(ex:hasProperty ex:on1 ex:color)
+ObjectPropertyAssertion(ex:hasProperty ex:on1 ex:size)
+
+Individual(ex:on2)
+Type(ex:on2 ex:Relation)
+ObjectPropertyAssertion(ex:subjectOf ex:mary ex:on2)
+ObjectPropertyAssertion(ex:objectOf ex:book ex:on2)
+ObjectPropertyAssertion(ex:hasProperty ex:on2 ex:color)
+ObjectPropertyAssertion(ex:hasProperty ex:on2 ex:size)
+
+# Define correspondences
+Individual(ex:color_size)
+Type(ex:color_size ex:LinearCorrespondence)
+DatatypePropertyAssertion(ex:mapsTo ex:color_size "0.2"^^xsd:float ex:color ex:size)
+DatatypePropertyAssertion(ex:mapsTo ex:color_size "0.8"^^xsd:float ex:size ex:color)
+Individual(ex:size_color)
+Type(ex:size_color ex:LinearCorrespondence)
+DatatypePropertyAssertion(ex:mapsTo ex:size_color "0.6"^^xsd:float ex:color ex:size)
+DatatypePropertyAssertion(ex:mapsTo ex:size_color "0.4"^^xsd:float ex:size ex:color)
+
+# Check if on relation satisfies the LCA
+ClassAssertion(ex:LinearCorrespondence ex:color_size)
+ClassAssertion(ex:LinearCorrespondence ex:size_color)
+ObjectPropertyAssertion(ex:hasCorrespondence ex:on1 ex:color_size)
+ObjectPropertyAssertion(ex:hasCorrespondence ex:on2 ex:size_color)
